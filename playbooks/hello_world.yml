@@ -2,5 +2,20 @@
   hosts: "{{ target_hosts | default('all') }}"
 
   tasks:
-    - name: Run a command to test
-      command: uptime
+    - name: Install httpd
+      yum:
+        name: httpd
+        state: latest
+
+    - name: Create index.html
+      copy:
+        content: "This is a web page"
+        dest: /var/www/html/index.html
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Start and enable apache
+      service:
+        name: httpd
+        state: started
