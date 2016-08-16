@@ -9,7 +9,7 @@
 
     - name: Create index.html
       copy:
-        content: "This is a web page"
+        content: "This is a web page\n"
         dest: /var/www/html/index.html
         owner: root
         group: root
