@@ -1,5 +1,6 @@
 - name: Test playbook
   hosts: "{{ target_hosts | default('all') }}"
 
-  - name: Run a command to test
-    command: uptime
+  tasks:
+    - name: Run a command to test
+      command: uptime
