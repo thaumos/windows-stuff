@@ -1,4 +1,4 @@
-- name: Install Microsofte SQL Server
+- name: Install Microsoft SQL Server
   hosts: "{{ target_hosts | default('mssql') }}"
   become: no
 
