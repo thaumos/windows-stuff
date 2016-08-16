@@ -1,0 +1,5 @@
+[git]
+tulpxgitap01.williams.com
+
+[windows:children]
+windows8Server64Guest
