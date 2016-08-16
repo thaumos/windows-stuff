@@ -5,3 +5,6 @@
 - name: oracle
   src: git@tulpxgitap01.williams.com:ansible/ansible-role-oracle.git
   scm: git
+
+- name: gitlab
+  src: samdoran.gitlab
