@@ -22,5 +22,12 @@
   #       - oracle
   #       - vcenter
 
+  vars:
+    oracle_netca_listener_protocols:
+      - protocol: tcp
+        port: 1525
+    oracle_netca_listener_start: LISTENER_1525
+    oracle_dbf_dir_fs: /db01{{ oracle_database_dirname_suffix }}/oradata
+
   roles:
     - oracle
