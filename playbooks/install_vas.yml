@@ -39,7 +39,7 @@
         src: "{{ item }}"
         dest: /var/tmp
       with_fileglob:
-        - {{ vas_file_path }}/python-pip*
+        - "{{ vas_file_path }}/python-pip*"
       tags:
         -
 
