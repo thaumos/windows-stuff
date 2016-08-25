@@ -9,7 +9,7 @@
 # vasclnt-4.0.2-280.x86_64
 
   tasks:
-    - name: Copy file to service
+    - name: Copy {{ vas_file_name }} to /var/tmp
       copy:
         src: "{{ vas_file_path }}/{{ vas_file_name }}"
         dest: /var/tmp
@@ -33,14 +33,21 @@
       tags:
         - vas
 
-    # - name: Install VAS
-    #   command: >
-    #       ./install.sh
-    #         -
-    #     value:
-    #   args:
+    - name: Install VAS
+      command: ./install.sh -q vasclnt vasgp
+      args:
+        chdir: "{{ vas_directory.files[0].path }}"
+        creates: /tmp/somefile
+      tags:
+        - vas
+        - vas_install
+
+    # - name: Join VAS
+    #   expect:
+    #     command: ./install.sh -i join
     #     chdir: "{{ vas_directory.files[0].path }}"
-    #     creates: /tmp/somefile
+    #     responses:
+
     #   tags:
     #     - vas
-    #     - vas_install
+        # - vas_install
