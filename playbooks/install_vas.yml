@@ -4,9 +4,9 @@
   vars:
     vas_file_path: /var/lib/awx/files
     vas_file_name: qas_4_1_0_21708.tar.gz
-
-# vasgp-4.0.2-280.x86_64
-# vasclnt-4.0.2-280.x86_64
+    vas_user: sdoran
+    vas_user_password: "{{ vault_vas_user_password }}"
+    vas_domain: WILLIAMS.COM
 
   tasks:
     - name: Copy {{ vas_file_name }} to /var/tmp
@@ -41,7 +41,7 @@
       with_fileglob:
         - "{{ vas_file_path }}/python-pip*"
       tags:
-        -
+        - vas
 
     - name: Install PIP
       yum:
@@ -62,17 +62,33 @@
       command: ./install.sh -q vasclnt vasgp
       args:
         chdir: "{{ vas_directory.files[0].path }}"
-        creates: /tmp/somefile
+        creates: /etc/opt/quest/vas
       tags:
         - vas
         - vas_install
 
-    # - name: Join VAS
-    #   expect:
-    #     command: ./install.sh join
-    #     chdir: "{{ vas_directory.files[0].path }}"
-    #     responses:
-    #         '\(yes\|no\)\?': 'yes\n'
-    #   tags:
-    #     - vas
-    #     - vas_install
+    - block:
+      - name: Join VAS
+        expect:
+          command: ./install.sh join
+          chdir: "{{ vas_directory.files[0].path }}"
+          creates: /etc/opt/quest/vas/host.keytab
+          responses:
+              Would you like to join a different domain: 'yes'
+              Do you wish to unjoin: 'yes'
+              Please specify an AD user: "{{ vas_user }}@{{ vas_domain }}"
+              join to: "{{ vas_domain }}"
+              Please enter password: "{{ vas_user_password }}"
+              '\(yes\|no\)\?': 'yes'
+        tags:
+          - vas
+          - vas_install
+
+      rescue:
+        - name: Cleanup files
+          file:
+            path: /etc/opt/quest
+            state: absent
+          tags:
+            - vas
+            - vas_install
