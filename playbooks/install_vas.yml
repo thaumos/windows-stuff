@@ -32,6 +32,31 @@
       register: vas_directory
       tags:
         - vas
+        - always
+
+    - name: Copy python-pip rpm
+      copy:
+        src: "{{ item }}"
+        dest: /var/tmp
+      with_fileglob:
+        - {{ vas_file_path }}/python-pip*
+      tags:
+        -
+
+    - name: Install PIP
+      yum:
+        name: /var/tmp/python-pip-7.1.0-1.el6.noarch.rpm
+        state: present
+      tags:
+        - vas
+        - always
+
+    - name: Install pexpect
+      pip:
+        name: pexpect
+      tags:
+        - vas
+        - always
 
     - name: Install VAS
       command: ./install.sh -q vasclnt vasgp
@@ -44,10 +69,10 @@
 
     # - name: Join VAS
     #   expect:
-    #     command: ./install.sh -i join
+    #     command: ./install.sh join
     #     chdir: "{{ vas_directory.files[0].path }}"
     #     responses:
-
+    #         '\(yes\|no\)\?': 'yes\n'
     #   tags:
     #     - vas
-        # - vas_install
+    #     - vas_install
