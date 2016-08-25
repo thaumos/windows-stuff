@@ -1,0 +1,46 @@
+- name: Install and configure VAS
+  hosts: "{{ target_hosts | default ('all') }}"
+
+  vars:
+    vas_file_path: /var/lib/awx/files
+    vas_file_name: qas_4_1_0_21708.tar.gz
+
+# vasgp-4.0.2-280.x86_64
+# vasclnt-4.0.2-280.x86_64
+
+  tasks:
+    - name: Copy file to service
+      copy:
+        src: "{{ vas_file_path }}/{{ vas_file_name }}"
+        dest: /var/tmp
+      tags:
+        - vas
+
+    - name: Unarchive file
+      unarchive:
+        src: /var/tmp/{{ vas_file_name }}
+        dest: /opt/
+        copy: no
+      tags:
+        - vas
+
+    - name: Get VAS filename
+      find:
+        paths: /opt/
+        patterns: QAS*
+        file_type: directory
+      register: vas_directory
+      tags:
+        - vas
+
+    # - name: Install VAS
+    #   command: >
+    #       ./install.sh
+    #         -
+    #     value:
+    #   args:
+    #     chdir: "{{ vas_directory.files[0].path }}"
+    #     creates: /tmp/somefile
+    #   tags:
+    #     - vas
+    #     - vas_install
