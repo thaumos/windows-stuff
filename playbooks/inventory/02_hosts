@@ -1,0 +1,8 @@
+[git]
+tulpxgitap01.williams.com
+
+[windows:children]
+windows8Server64Guest
+
+[windows:vars]
+tastvar="defined in 02_hosts"
