@@ -4,3 +4,6 @@
 
   roles:
     - mssql
+
+  vars_files:
+    - group_vars/mssql
