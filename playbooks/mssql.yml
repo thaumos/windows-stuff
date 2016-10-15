@@ -1,8 +1,8 @@
 - name: Install Microsoft SQL Server
   hosts: "{{ target_hosts | default('mssql') }}"
+  vars_files:
+    - group_vars/mssql
   become: no
 
   roles:
     - mssql
-  vars_files:
-    - group_vars/mssql
